@@ -15,4 +15,10 @@ public class Country extends PanacheEntity {
     public String countryName;
     @OneToMany(mappedBy = "country")
     public List<TSCurrency> currencyList;
+    @Column(name = "soft_deleted")
+    public Boolean softDeleted = false;
+
+    public static List<Country> getCountriesByName(String name){
+        return find("country_name like CONCAT('%',?1, '%') ", name).list();
+    }
 }
