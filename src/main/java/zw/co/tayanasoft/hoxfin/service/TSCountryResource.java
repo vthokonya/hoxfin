@@ -1,5 +1,6 @@
 package zw.co.tayanasoft.hoxfin.service;
 
+import org.postgresql.copy.CopyOut;
 import zw.co.tayanasoft.hoxfin.dao.Country;
 
 import javax.transaction.Transactional;
@@ -25,5 +26,44 @@ public class TSCountryResource {
     public Country addCountry(Country country){
         country.persist();
         return country;
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Transactional
+    public Country removeCountry(Long id){
+        Country country = Country.findById(id);
+        if(country == null){
+            return null;
+        }
+        country.softDeleted=true;
+        country.persist();
+        return country;
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Transactional
+    public Country updateCountry(Long id, Country editCountry){
+        Country country = Country.findById(id);
+        if (country == null){
+            return editCountry;
+        }
+        if(country.countryName.equals(editCountry.countryName))
+            country.countryName = editCountry.countryName;
+        country.persist();
+        return country;
+    }
+
+    @GET
+    @Path("/{id}")
+    public Country getCountry(Long id){
+        return Country.findById(id);
+    }
+
+    @GET
+    @Path("/search/{name}")
+    public List<Country> getCountries(String name){
+        return Country.getCountriesByName(name);
     }
 }
