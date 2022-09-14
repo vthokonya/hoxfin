@@ -1,0 +1,1 @@
+ALTER TABLE ts_country ADD soft_deleted BOOLEAN;
